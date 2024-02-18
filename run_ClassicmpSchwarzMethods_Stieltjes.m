@@ -7,7 +7,7 @@ SM_nmbiter = 61; % number of RAS iterations
 SM_relresacc = 1e-12; % number of RAS iterations
 RM_nmbdigits_list = 1:16; % number of digits to keep for the subdomain solves
 dampingTheta = 1/3; % generally one should use 1/(2^SM_nmbsubdoms_PwrOfTwo+1) but since we have sausage-like domain decomposition, we can do with alternating coloring no matter how many subdomains
-Advanpix = true; CalcErrMtrx = true; DoPlotting = false; SavePlotData = true;
+Advanpix = true; CalcErrMtrx = true; DoPlotting = true; SavePlotData = false;
 
 %%% plotting
 indsIter_PlotErr = [10,20,60];
@@ -18,7 +18,7 @@ inds_FrstIndDigThatStsfyConvCond = [];
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  FD  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 list_of_nmb_int_gridcols = 50:10:320; % number of "unknown" gridcolumns - excluding the left-most and right-most where we have Dirichlet BCs 
-ProblemChoice = 22;
+ProblemChoice = 1;
 
 
 

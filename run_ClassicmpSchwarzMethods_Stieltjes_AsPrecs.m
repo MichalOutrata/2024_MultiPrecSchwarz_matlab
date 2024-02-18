@@ -11,7 +11,7 @@ SM_nmbiter = 42; SM_relresacc = 42.42;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  FD  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 list_of_nmb_int_gridcols = 50:10:320; % number of "unknown" gridcolumns - excluding the left-most and right-most where we have Dirichlet BCs 
-ProblemChoice = 22;
+ProblemChoice = 2;
 
 
 %%% choose GMRES set-up

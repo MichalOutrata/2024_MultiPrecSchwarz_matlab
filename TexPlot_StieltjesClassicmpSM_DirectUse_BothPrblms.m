@@ -19,11 +19,6 @@ ConvCurves_dAS_Prblm1 = LoadedData{24}; ConvFactApprox_dAS_Prblm1 = LoadedData{2
 ConvCurves_RAS_Prblm1 = LoadedData{30}; ConvFactApprox_RAS_Prblm1 = LoadedData{32}; PlotData_ErrPlot_RAS_Prblm1 = LoadedData{34};
 ConvCurves_MS_Prblm1 = LoadedData{36}; ConvFactApprox_MS_Prblm1 = LoadedData{38}; PlotData_ErrPlot_MS_Prblm1 = LoadedData{40};
 indsDigs_PlotErr_Prblm1 = LoadedData{42}; indsIter_PlotErr_Prblm1 = LoadedData{44}; 
-
-% %%% place holder before we re-run the experiments
-% inds_DigsThatStsfyConvCond_dAS_Prblm3 = LoadedData{46};
-% inds_FrstIndDigThatStsfyConvCond_Prblm3 = ones(length(list_of_nmb_int_gridcols),1)*inds_DigsThatStsfyConvCond_dAS_Prblm3;
-%%% after we re-run, replace with
 inds_FrstIndDigThatStsfyConvCond_Prblm1 = LoadedData{46};
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -36,12 +31,29 @@ ConvCurves_dAS_Prblm2 = LoadedData{24}; ConvFactApprox_dAS_Prblm2 = LoadedData{2
 ConvCurves_RAS_Prblm2 = LoadedData{30}; ConvFactApprox_RAS_Prblm2 = LoadedData{32}; PlotData_ErrPlot_RAS_Prblm2 = LoadedData{34};
 ConvCurves_MS_Prblm2 = LoadedData{36}; ConvFactApprox_MS_Prblm2 = LoadedData{38}; PlotData_ErrPlot_MS_Prblm2 = LoadedData{40};
 indsDigs_PlotErr_Prblm2 = LoadedData{42}; indsIter_PlotErr_Prblm2 = LoadedData{44}; 
-
-% %%% place holder before we re-run the experiments
-% inds_DigsThatStsfyConvCond_dAS_Prblm4 = LoadedData{46};
-% inds_FrstIndDigThatStsfyConvCond_Prblm4 = ones(length(list_of_nmb_int_gridcols),1)*inds_DigsThatStsfyConvCond_dAS_Prblm3;
-%%% after we re-run, replace with
 inds_FrstIndDigThatStsfyConvCond_Prblm2 = LoadedData{46};
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+ProblemChoice = 22;
+s_LoadString = append(append('SavedData_ClassicmpSM_Stieltjes_Prblm',num2str(ProblemChoice)),'.mat'); LoadedData = load(s_LoadString).MyData;
+RM_nmbdigits_list = LoadedData{12}; CalcErrMtrx  = LoadedData{16}; list_of_nmb_int_gridcols = LoadedData{20};
+u_ExactSol_Prblm3 = LoadedData{22};
+ConvCurves_dAS_Prblm3 = LoadedData{24}; ConvFactApprox_dAS_Prblm3 = LoadedData{26}; PlotData_ErrPlot_dAS_Prblm3 = LoadedData{28};
+ConvCurves_RAS_Prblm3 = LoadedData{30}; ConvFactApprox_RAS_Prblm3 = LoadedData{32}; PlotData_ErrPlot_RAS_Prblm3 = LoadedData{34};
+ConvCurves_MS_Prblm3 = LoadedData{36}; ConvFactApprox_MS_Prblm3 = LoadedData{38}; PlotData_ErrPlot_MS_Prblm3 = LoadedData{40};
+indsDigs_PlotErr_Prblm3 = LoadedData{42}; indsIter_PlotErr_Prblm3 = LoadedData{44}; 
+inds_FrstIndDigThatStsfyConvCond_Prblm3 = LoadedData{46};
+
+%%% get first inds s.t. \| (I+Ci)^(-1) F \| < 1
+invIpCi_Fi_norms = LoadedData{48}; inds_FrstIndDigThatStsfy_norm_invIpCi_Fi_leq_1 = nan(length(list_of_nmb_int_gridcols),1);
+for ind_nmbgridcols = 1:length(list_of_nmb_int_gridcols)
+    for ind_dig = 1:length(RM_nmbdigits_list)
+        if invIpCi_Fi_norms(ind_nmbgridcols,ind_dig,1) < 1 && invIpCi_Fi_norms(ind_nmbgridcols,ind_dig,2) < 1
+        inds_FrstIndDigThatStsfy_norm_invIpCi_Fi_leq_1(ind_nmbgridcols) = ind_dig; break;
+        end
+    end
+end
 
 
 
@@ -118,18 +130,18 @@ ConvFactApprox_RAS_Prblm1(10,3) = ConvFactApproxSequence(18);
 
 %%% Prblm 1, MS -> mesh sizes 1,10 (checked manually the conv. curves) 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-figure; t(1) = tiledlayout(1,3,'TileSpacing','compact','Padding','Compact');
-nexttile()
-for ind_nmbdig = Max_ds:-1:1
-    PlotData = reshape(ConvCurves_MS_Prblm1(1,ind_nmbdig,1:nmb_iters_ToPlot+1) ,nmb_iters_ToPlot+1,1);
-    semilogy(iters_mesh, PlotData,'Color',[MyColors{ind_nmbdig}],'Marker','o','MarkerSize',12,'LineWidth',2); hold on;
-end
-legend();
-nexttile()
-for ind_nmbdig = Max_ds:-1:1
-    PlotData = reshape(ConvCurves_MS_Prblm1(10,ind_nmbdig,1:nmb_iters_ToPlot+1) ,nmb_iters_ToPlot+1,1);
-    semilogy(iters_mesh, PlotData,'Color',[MyColors{ind_nmbdig}],'Marker','o','MarkerSize',12,'LineWidth',2); hold on;
-end
+% figure; t(1) = tiledlayout(1,2,'TileSpacing','compact','Padding','Compact');
+% nexttile()
+% for ind_nmbdig = Max_ds:-1:1
+%     PlotData = reshape(ConvCurves_MS_Prblm1(1,ind_nmbdig,1:nmb_iters_ToPlot+1) ,nmb_iters_ToPlot+1,1);
+%     semilogy(iters_mesh, PlotData,'Color',[MyColors{ind_nmbdig}],'Marker','o','MarkerSize',12,'LineWidth',2); hold on;
+% end
+% legend();
+% nexttile()
+% for ind_nmbdig = Max_ds:-1:1
+%     PlotData = reshape(ConvCurves_MS_Prblm1(10,ind_nmbdig,1:nmb_iters_ToPlot+1) ,nmb_iters_ToPlot+1,1);
+%     semilogy(iters_mesh, PlotData,'Color',[MyColors{ind_nmbdig}],'Marker','o','MarkerSize',12,'LineWidth',2); hold on;
+% end
 %%% hence:
 ConvFactApprox_MS_Prblm1(:,1:2) = nan(28,2);
 ConvCrv_mshsiz10 = reshape(ConvCurves_MS_Prblm1(10,3,:), 1,length(ConvCurves_MS_Prblm1(10,3,:))); ConvCrv_mshsiz10_cut = ConvCrv_mshsiz10(1:16);
@@ -197,7 +209,7 @@ ConvFactApprox_dAS_Prblm2(10,3) = ConvFactApproxSequence(18);
 ConvFactApprox_RAS_Prblm2(2:end,1:2) = nan(27,2);
 
 
-%%% Prblm 1, MS -> mesh sizes 1,2 (checked manually the conv. curves) 
+%%% Prblm 2, MS -> mesh sizes 1,2 (checked manually the conv. curves) 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % figure; t(1) = tiledlayout(1,2,'TileSpacing','compact','Padding','Compact');
 % nexttile()
@@ -220,9 +232,68 @@ ConvFactApprox_MS_Prblm2(2:end,1:2) = nan(27,2);
 
 
 
+%%% Prblm 3 dAS -> mesh sizes 1,2,3,10 (checked manually the conv. curves) 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% figure; t(1) = tiledlayout(1,2,'TileSpacing','compact','Padding','Compact');
+% nexttile()
+% for ind_nmbdig = Max_ds:-1:1
+%     PlotData = reshape(ConvCurves_dAS_Prblm3(13,ind_nmbdig,1:nmb_iters_ToPlot+1) ,nmb_iters_ToPlot+1,1);
+%     semilogy(iters_mesh, PlotData,'Color',[MyColors{ind_nmbdig}],'Marker','o','MarkerSize',12,'LineWidth',2); hold on;
+% end
+% legend();
+% nexttile()
+% for ind_nmbdig = Max_ds:-1:1
+%     PlotData = reshape(ConvCurves_dAS_Prblm3(23,ind_nmbdig,1:nmb_iters_ToPlot+1) ,nmb_iters_ToPlot+1,1);
+%     semilogy(iters_mesh, PlotData,'Color',[MyColors{ind_nmbdig}],'Marker','o','MarkerSize',12,'LineWidth',2); hold on;
+% end
+% legend();
+%%% hence:
+ConvFactApprox_dAS_Prblm3(13,1) = nan; ConvFactApprox_dAS_Prblm3(14,1) = nan; ConvFactApprox_dAS_Prblm3(23,1) = nan;
 
 
 
+%%% Prblm 2, RAS -> mesh sizes 1,2,10 (checked manually the conv. curves) 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% all good
+
+
+%%% Prblm 2, MS -> mesh sizes 1,2 (checked manually the conv. curves) 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% figure; t(1) = tiledlayout(1,1,'TileSpacing','compact','Padding','Compact');
+% Max_ds = 14;
+% nexttile()
+% for ind_nmbdig = Max_ds:-1:1
+%     PlotData = reshape(ConvCurves_MS_Prblm3(1,ind_nmbdig,1:nmb_iters_ToPlot+1) ,nmb_iters_ToPlot+1,1);
+%     semilogy(iters_mesh, PlotData,'Color',[MyColors{ind_nmbdig}],'Marker','o','MarkerSize',12,'LineWidth',2); hold on;
+% end
+% legend();
+% figure; t(1) = tiledlayout(1,1,'TileSpacing','compact','Padding','Compact');
+% nexttile()
+% Max_ds = 4;
+% for ind_nmbdig = Max_ds:-1:1
+%     PlotData = reshape(ConvCurves_MS_Prblm3(9,ind_nmbdig,1:nmb_iters_ToPlot+1) ,nmb_iters_ToPlot+1,1);
+%     semilogy(iters_mesh, PlotData,'Color',[MyColors{ind_nmbdig}],'Marker','o','MarkerSize',12,'LineWidth',2); hold on;
+% end
+% legend();
+%%% hence:
+ConvFactApprox_MS_Prblm3(9,1) = nan;
+
+%%% and recalculate conv facts for d_s=1:16 by taking only the first 50 itersand not the full 61  
+% figure; t(1) = tiledlayout(4,4,'TileSpacing','compact','Padding','Compact');
+for ind_dig = 1:16
+    ConvCrv_mshsiz1 = reshape(ConvCurves_MS_Prblm3(1,ind_dig,:), 1,length(ConvCurves_MS_Prblm3(1,ind_dig,:))); ConvCrv_mshsiz1_cut = ConvCrv_mshsiz1(1:50);
+    ConsecErrsRatio = ConvCrv_mshsiz1_cut(2:end)./ConvCrv_mshsiz1_cut(1:end-1);
+    ConvFactApproxSequence_cut = ( ConsecErrsRatio(1:end-2) + ConsecErrsRatio(2:end-1) ) / 2;
+    %%%
+    ConvCrv_mshsiz1 = reshape(ConvCurves_MS_Prblm3(1,ind_dig,:), 1,length(ConvCurves_MS_Prblm3(1,ind_dig,:))); ConvCrv_mshsiz1_nocut = ConvCrv_mshsiz1(1:60);
+    ConsecErrsRatio = ConvCrv_mshsiz1_nocut(2:end)./ConvCrv_mshsiz1_nocut(1:end-1);
+    ConvFactApproxSequence_nocut = ( ConsecErrsRatio(1:end-2) + ConsecErrsRatio(2:end-1) ) / 2;
+    % nexttile(); plot(ConvFactApproxSequence_nocut); hold on; plot(ConvFactApproxSequence_cut);
+    %%%
+    %%%
+    %%% hence
+    ConvFactApprox_MS_Prblm3(1,ind_dig) = ConvFactApproxSequence_cut(end);
+end
 
 
 
@@ -247,7 +318,7 @@ MyMarkers = {'o','d','s','^','*','>'}; MyLines = {'--','-.',':','-'};
 
 %%% plot the ConvFact as a function of number of digits
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-figure; t(1) = tiledlayout(2,2,'TileSpacing','compact','Padding','Compact');
+figure; t(1) = tiledlayout(2,3,'TileSpacing','tight','Padding','tight');
 ind_MeshSizeToPlot = 1;
 nmb_iters_ToPlot = 60; iters_mesh = 0:nmb_iters_ToPlot;
 nmb_DigsToPlot = 6;
@@ -266,10 +337,17 @@ for ind_nmbdig = nmb_DigsToPlot:-1:1
 end
 ylim([1e-13,1])
 title('Problem 5', 'FontSize',24,'FontWeight','bold','interpreter', 'latex'); xlabel('iteration','FontSize',24,'interpreter', 'latex');
+nexttile(3); 
+for ind_nmbdig = nmb_DigsToPlot:-1:1
+    PlotData = reshape(ConvCurves_MS_Prblm3(ind_MeshSizeToPlot,ind_nmbdig,1:nmb_iters_ToPlot+1) ,nmb_iters_ToPlot+1,1);
+    semilogy(iters_mesh, PlotData,'Color',[MyColors{ind_nmbdig}],'Marker','o','MarkerSize',12,'LineWidth',2); hold on;
+end
+ylim([1e-13,1])
+title('Problem 6', 'FontSize',24,'FontWeight','bold','interpreter', 'latex'); xlabel('iteration','FontSize',24,'interpreter', 'latex');
 
 
 % bottom row: observed convergence factors of MS,dAS,RAS for different d_s for Problem 1
-nexttile(3);
+nexttile(4);
 plot(RM_nmbdigits_list,ConvFactApprox_dAS_Prblm1(ind_MeshSizeToPlot,:),'Color',[MyColors{7}],'Marker','d','MarkerSize',14,'LineWidth',2); hold on;
 % LegendHandles(1) = plt; LegendLabels{1} = 'dAS, $\theta = \frac{1}{3}$';
 if CalcErrMtrx, inds_to_color = inds_FrstIndDigThatStsfyConvCond_Prblm1(ind_MeshSizeToPlot):length(RM_nmbdigits_list);
@@ -289,7 +367,7 @@ if CalcErrMtrx,  inds_to_color = inds_FrstIndDigThatStsfyConvCond_Prblm1(ind_Mes
     'MarkerFaceColor',[MyColors{7}],'Color',[MyColors{7}],'Marker','o','MarkerSize',14,'LineWidth',2); hold on; end
 xlabel('$d_s$','FontSize',24, 'interpreter', 'latex'); %title('observed $\rho_{\mathrm{conv}}$','FontSize',24,'interpreter', 'latex');
 
-nexttile(4);
+nexttile(5);
 plot(RM_nmbdigits_list,ConvFactApprox_dAS_Prblm2(ind_MeshSizeToPlot,:),'Color',[MyColors{7}],'Marker','d','MarkerSize',14,'LineWidth',2); hold on;
 % LegendHandles(1) = plt; LegendLabels{1} = 'dAS, $\theta = \frac{1}{3}$';
 if CalcErrMtrx, inds_to_color = inds_FrstIndDigThatStsfyConvCond_Prblm2(ind_MeshSizeToPlot):length(RM_nmbdigits_list);
@@ -306,6 +384,26 @@ plot(RM_nmbdigits_list,ConvFactApprox_MS_Prblm2(ind_MeshSizeToPlot,:),'Color',[M
 % LegendHandles(3) = plt; LegendLabels{3} = 'MS';
 if CalcErrMtrx,  inds_to_color = inds_FrstIndDigThatStsfyConvCond_Prblm2(ind_MeshSizeToPlot):length(RM_nmbdigits_list);
     plot(inds_to_color,ConvFactApprox_MS_Prblm2(ind_MeshSizeToPlot,inds_to_color),'MarkerEdgeColor',[MyColors{7}], ...
+    'MarkerFaceColor',[MyColors{7}],'Color',[MyColors{7}],'Marker','o','MarkerSize',14,'LineWidth',2); hold on; end
+xlabel('$d_s$','FontSize',24, 'interpreter', 'latex');
+
+nexttile(6);
+plot(RM_nmbdigits_list,ConvFactApprox_dAS_Prblm3(ind_MeshSizeToPlot,:),'Color',[MyColors{7}],'Marker','d','MarkerSize',14,'LineWidth',2); hold on;
+% LegendHandles(1) = plt; LegendLabels{1} = 'dAS, $\theta = \frac{1}{3}$';
+if CalcErrMtrx, inds_to_color = inds_FrstIndDigThatStsfyConvCond_Prblm3(ind_MeshSizeToPlot):length(RM_nmbdigits_list);
+    plot(inds_to_color,ConvFactApprox_dAS_Prblm3(ind_MeshSizeToPlot,inds_to_color),'MarkerEdgeColor',[MyColors{7}], ...
+    'MarkerFaceColor',[MyColors{7}],'Color',[MyColors{7}],'Marker','d','MarkerSize',14,'LineWidth',2); hold on; end
+
+plot(RM_nmbdigits_list,ConvFactApprox_RAS_Prblm3(ind_MeshSizeToPlot,:),'Color',[MyColors{7}],'Marker','^','MarkerSize',14,'LineWidth',2); hold on;
+% LegendHandles(2) = plt; LegendLabels{2} = 'RAS';
+if CalcErrMtrx,  inds_to_color = inds_FrstIndDigThatStsfyConvCond_Prblm3(ind_MeshSizeToPlot):length(RM_nmbdigits_list);
+    plot(inds_to_color,ConvFactApprox_RAS_Prblm3(ind_MeshSizeToPlot,inds_to_color),'MarkerEdgeColor',[MyColors{7}], ...
+    'MarkerFaceColor',[MyColors{7}],'Color',[MyColors{7}],'Marker','^','MarkerSize',14,'LineWidth',2); hold on; end
+
+plot(RM_nmbdigits_list,ConvFactApprox_MS_Prblm3(ind_MeshSizeToPlot,:),'Color',[MyColors{7}],'Marker','o','MarkerSize',14,'LineWidth',2); hold on;
+% LegendHandles(3) = plt; LegendLabels{3} = 'MS';
+if CalcErrMtrx,  inds_to_color = inds_FrstIndDigThatStsfyConvCond_Prblm3(ind_MeshSizeToPlot):length(RM_nmbdigits_list);
+    plot(inds_to_color,ConvFactApprox_MS_Prblm3(ind_MeshSizeToPlot,inds_to_color),'MarkerEdgeColor',[MyColors{7}], ...
     'MarkerFaceColor',[MyColors{7}],'Color',[MyColors{7}],'Marker','o','MarkerSize',14,'LineWidth',2); hold on; end
 xlabel('$d_s$','FontSize',24, 'interpreter', 'latex');
 
@@ -400,7 +498,7 @@ end
 
 %%% plot interaction of "d_s " and "h"
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-nmbRowsTiles = 2; nmbColsTiles = 3; 
+nmbRowsTiles = 3; nmbColsTiles = 3; 
 figure; t(1) = tiledlayout(nmbRowsTiles,nmbColsTiles,'TileSpacing','Compact','Padding','Compact');
 
 ind_MeshSizeToPlot = 1; angle1 = 227; angle2 = 26;
@@ -412,7 +510,7 @@ for ind = 1:length(list_of_nmb_int_gridcols)
     end
 end
 
-% first row: observed convergence factor for diff d_s and nmb_int_gridcols for Problem 3
+% first row: observed convergence factor for diff d_s and nmb_int_gridcols for Problem 1
 %%%%% 
 nexttile();
 ribbon(ConvFactApprox_dAS_Prblm1'); hold on; 
@@ -444,7 +542,7 @@ view(angle1,angle2);  title('multiplicative Schwarz', 'interpreter', 'latex');
 xticks([]); ylim([0,17]); yticks([1,4,8,12,16]); yticklabels({});
 
 
-% first row: observed convergence factor for diff d_s and nmb_int_gridcols for Problem 4
+% second row: observed convergence factor for diff d_s and nmb_int_gridcols for Problem 2
 %%%%%
 nexttile();
 ribbon(ConvFactApprox_dAS_Prblm2'); hold on; 
@@ -453,7 +551,7 @@ for ind = 1:length(list_of_nmb_int_gridcols)
     plot3(x,y,z,'Marker','o','Color','black','MarkerSize',15,'MarkerFaceColor','[.7 .7 .7]'); hold on;
 end
 view(angle1,angle2); 
-xticks([]); ylabel('$d_s$','FontSize',24,'interpreter', 'latex'); ylim([0,17]); yticks([1,4,8,12,16]); yticklabels({'1','4','8','12','16'}); ytickangle(0);
+xticks([]); ylim([0,17]); yticks([1,4,8,12,16]); yticklabels({});
 zlabel('Problem 5','FontSize',24,'interpreter', 'latex');
 
 nexttile();
@@ -463,14 +561,56 @@ for ind = 1:length(list_of_nmb_int_gridcols)
     plot3(x,y,z,'Marker','o','Color','black','MarkerSize',15,'MarkerFaceColor','[.7 .7 .7]'); hold on;
 end
 view(angle1,angle2);
-xticks([]); ylabel('$d_s$','FontSize',24,'interpreter', 'latex'); ylim([0,17]); yticks([1,4,8,12,16]); yticklabels({'1','4','8','12','16'}); ytickangle(0);
+xticks([]); ylim([0,17]); yticks([1,4,8,12,16]); yticklabels({});
 
 nexttile(); LegendHandles = []; LegendLabels = {};
 ribbon(ConvFactApprox_MS_Prblm2');  hold on; 
 for ind = 1:length(list_of_nmb_int_gridcols)
     x = ind; y = inds_FrstIndDigThatStsfyConvCond_Prblm2(ind); z = ConvFactApprox_MS_Prblm2(x,y);
     plt = plot3(x,y,z,'Marker','o','Color','black','MarkerSize',15,'MarkerFaceColor','[.7 .7 .7]'); hold on;
-    LegendHandles(1) = plt; LegendLabels{1} = 'first $d_s$ such that $\| A_i^{-1} \mathtt{E}_i \| < 1$';
+end
+view(angle1,angle2);
+xticks([]); ylim([0,17]); yticks([1,4,8,12,16]); yticklabels({});
+
+
+% third row: observed convergence factor for diff d_s and nmb_int_gridcols for Problem 3
+%%%%%
+nexttile();
+ribbon(ConvFactApprox_dAS_Prblm3'); hold on; 
+for ind = 1:length(list_of_nmb_int_gridcols)
+    x = ind; y = inds_FrstIndDigThatStsfyConvCond_Prblm3(ind); z = ConvFactApprox_dAS_Prblm3(x,y);
+    plt1 = plot3(x,y,z,'Marker','o','Color','black','MarkerSize',15,'MarkerFaceColor','[.7 .7 .7]'); hold on;
+    a = ind; b = inds_FrstIndDigThatStsfy_norm_invIpCi_Fi_leq_1(ind); c = ConvFactApprox_dAS_Prblm3(a,b);
+    plt2 = plot3(a,b,c,'Marker','o','Color','black','MarkerSize',15,'MarkerFaceColor','[1 1 1]'); hold on;
+    % LegendHandles(1) = plt1; LegendLabels{1} = 'first $d_s$ such that convergence conditions are satisfied';
+    % LegendHandles(2) = plt2; LegendLabels{2} = 'first $d_s$ such that convergence conditions are satisfied';
+end
+view(angle1,angle2); 
+xticks([]); ylabel('$d_s$','FontSize',24,'interpreter', 'latex'); ylim([0,17]); yticks([1,4,8,12,16]); yticklabels({'1','4','8','12','16'}); ytickangle(0);
+zlabel('Problem 5','FontSize',24,'interpreter', 'latex');
+
+nexttile();
+ribbon(ConvFactApprox_RAS_Prblm3'); hold on; 
+for ind = 1:length(list_of_nmb_int_gridcols)
+    x = ind; y = inds_FrstIndDigThatStsfyConvCond_Prblm3(ind); z = ConvFactApprox_RAS_Prblm3(x,y);
+    plt1 = plot3(x,y,z,'Marker','o','Color','black','MarkerSize',15,'MarkerFaceColor','[.7 .7 .7]'); hold on;
+    a = ind; b = inds_FrstIndDigThatStsfy_norm_invIpCi_Fi_leq_1(ind); c = ConvFactApprox_RAS_Prblm3(a,b);
+    plt2 = plot3(a,b,c,'Marker','o','Color','black','MarkerSize',15,'MarkerFaceColor','[1 1 1]'); hold on;
+    % LegendHandles(1) = plt1; LegendLabels{1} = 'first $d_s$ such that convergence conditions are satisfied';
+    % LegendHandles(2) = plt2; LegendLabels{2} = 'first $d_s$ such that convergence conditions are satisfied';
+end
+view(angle1,angle2);
+xticks([]); ylabel('$d_s$','FontSize',24,'interpreter', 'latex'); ylim([0,17]); yticks([1,4,8,12,16]); yticklabels({'1','4','8','12','16'}); ytickangle(0);
+
+nexttile(); LegendHandles = []; LegendLabels = {};
+ribbon(ConvFactApprox_MS_Prblm3');  hold on; 
+for ind = 1:length(list_of_nmb_int_gridcols)
+    x = ind; y = inds_FrstIndDigThatStsfyConvCond_Prblm3(ind); z = ConvFactApprox_MS_Prblm3(x,y);
+    plt1 = plot3(x,y,z,'Marker','o','Color','black','MarkerSize',15,'MarkerFaceColor','[.7 .7 .7]'); hold on;
+    a = ind; b = inds_FrstIndDigThatStsfy_norm_invIpCi_Fi_leq_1(ind); c = ConvFactApprox_MS_Prblm3(a,b);
+    plt2 = plot3(a,b,c,'Marker','o','Color','black','MarkerSize',15,'MarkerFaceColor','[1 1 1]'); hold on;
+    LegendHandles(1) = plt1; LegendLabels{1} = 'first $d_s$ such that convergence conditions are satisfied $\qquad$';
+    LegendHandles(2) = plt2; LegendLabels{2} = 'first $d_s$ such that $\| (I + C_i)^{-1} \mathtt{F}_i \| < 1$';
 end
 view(angle1,angle2);
 xticks([]); ylabel('$d_s$','FontSize',24,'interpreter', 'latex'); ylim([0,17]); yticks([1,4,8,12,16]); yticklabels({'1','4','8','12','16'}); ytickangle(0);
