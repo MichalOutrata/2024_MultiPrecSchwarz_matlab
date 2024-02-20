@@ -100,6 +100,8 @@ for ind_meshsize = 1:length(list_of_nmb_int_gridcols)
         % if we did the CalcErrMtrx, then check if we satisfied the condition
         if CalcErrMtrx
             if ~(any(SMoutput{4})), inds_FrstIndDigThatStsfyConvCond(ind_meshsize) = ind_nmbdig; CalcErrMtrx_rplc = false; end
+            InvErrMtrx_normest(ind_meshsize,ind_nmbdig,:) = SMoutput{5}; 
+            if ind_nmbdig == 1, CondEst_Ai(ind_meshsize,:) = SMoutput{6}; end
         end
     end
 
@@ -198,7 +200,8 @@ MyData = {'Schwarz methods','dAS,RAS,MS', '# subdoms = 2^{...}',SM_nmbsubdoms_Pw
     'ConvCurvs dAS', ConvCurves_dAS, 'approx ConvFacts dAS', ConvFactApprox_dAS, 'Error plots dAS (only for the largest problem)', PlotData_ErrPlot_dAS, ...
     'ConvCurvs RAS', ConvCurves_RAS, 'approx ConvFacts RAS', ConvFactApprox_RAS, 'Error plots RAS (only for the largest problem)', PlotData_ErrPlot_RAS, ...
     'ConvCurvs MS', ConvCurves_MS, 'approx ConvFacts MS', ConvFactApprox_MS, 'Error plots MS (only for the largest problem)', PlotData_ErrPlot_MS, ...
-    'RM_nmbdigs_list indices for which we plot error', indsDigs_PlotErr, 'SM ityeration indices for which we plot error', indsIter_PlotErr, 'RM_nmbdigs_list inds that satisfy the conv cond', inds_FrstIndDigThatStsfyConvCond};
+    'RM_nmbdigs_list indices for which we plot error', indsDigs_PlotErr, 'SM ityeration indices for which we plot error', indsIter_PlotErr, 'RM_nmbdigs_list inds that satisfy the conv cond', inds_FrstIndDigThatStsfyConvCond, ...
+    'The saved norms of inv_Ai_ErrMtrx', InvErrMtrx_normest, 'The saved condition number estimates for the subdomain problems', CondEst_Ai };
 s_SaveString = append(append('SavedData_ClassicmpSM_Stieltjes_Prblm',num2str(ProblemChoice)),'.mat');
 save(s_SaveString,'MyData');  
 
@@ -339,6 +342,8 @@ for ind_meshsize = 1:length(list_of_nmb_int_gridcols)
         % if we did the CalcErrMtrx, then check if we satisfied the condition
         if CalcErrMtrx
             if ~(any(SMoutput{4})), inds_FrstIndDigThatStsfyConvCond(ind_meshsize) = ind_nmbdig; CalcErrMtrx_rplc = false; end
+            InvErrMtrx_normest(ind_meshsize,ind_nmbdig,:) = SMoutput{5}; 
+            if ind_nmbdig == 1, CondEst_Ai(ind_meshsize,:) = SMoutput{6}; end
         end
     end
 
@@ -438,7 +443,8 @@ MyData = {'Schwarz methods','dAS,RAS,MS', '# subdoms = 2^{...}',SM_nmbsubdoms_Pw
     'ConvCurvs dAS', ConvCurves_dAS, 'approx ConvFacts dAS', ConvFactApprox_dAS, 'Error plots dAS (only for the largest problem)', PlotData_ErrPlot_dAS, ...
     'ConvCurvs RAS', ConvCurves_RAS, 'approx ConvFacts RAS', ConvFactApprox_RAS, 'Error plots RAS (only for the largest problem)', PlotData_ErrPlot_RAS, ...
     'ConvCurvs MS', ConvCurves_MS, 'approx ConvFacts MS', ConvFactApprox_MS, 'Error plots MS (only for the largest problem)', PlotData_ErrPlot_MS, ...
-    'RM_nmbdigs_list indices for which we plot error', indsDigs_PlotErr, 'SM ityeration indices for which we plot error', indsIter_PlotErr, 'RM_nmbdigs_list inds that satisfy the conv cond', inds_FrstIndDigThatStsfyConvCond};
+    'RM_nmbdigs_list indices for which we plot error', indsDigs_PlotErr, 'SM ityeration indices for which we plot error', indsIter_PlotErr, 'RM_nmbdigs_list inds that satisfy the conv cond', inds_FrstIndDigThatStsfyConvCond, ...
+    'The saved norms of inv_Ai_ErrMtrx', InvErrMtrx_normest, 'The saved condition number estimates for the subdomain problems', CondEst_Ai };
 s_SaveString = append(append('SavedData_ClassicmpSM_Stieltjes_Prblm',num2str(ProblemChoice)),'.mat');
 save(s_SaveString,'MyData');  
 

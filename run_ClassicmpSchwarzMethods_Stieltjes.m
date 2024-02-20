@@ -5,7 +5,7 @@ clear; clc; close('all');
 SM_nmbsubdoms_PwrOfTwo = 1; % number of subdomains for the Schwarz method
 SM_nmbiter = 61; % number of RAS iterations
 SM_relresacc = 1e-12; % number of RAS iterations
-RM_nmbdigits_list = 1:16; % number of digits to keep for the subdomain solves
+RM_nmbdigits_list = 3:4; % number of digits to keep for the subdomain solves
 dampingTheta = 1/3; % generally one should use 1/(2^SM_nmbsubdoms_PwrOfTwo+1) but since we have sausage-like domain decomposition, we can do with alternating coloring no matter how many subdomains
 Advanpix = true; CalcErrMtrx = true; DoPlotting = true; SavePlotData = false;
 
@@ -17,8 +17,8 @@ inds_FrstIndDigThatStsfyConvCond = [];
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  FD  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-list_of_nmb_int_gridcols = 50:10:320; % number of "unknown" gridcolumns - excluding the left-most and right-most where we have Dirichlet BCs 
-ProblemChoice = 1;
+list_of_nmb_int_gridcols = 150:10:320; % number of "unknown" gridcolumns - excluding the left-most and right-most where we have Dirichlet BCs 
+ProblemChoice = 22;
 
 
 

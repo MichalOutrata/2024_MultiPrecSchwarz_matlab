@@ -21,6 +21,20 @@ ConvCurves_MS_Prblm1 = LoadedData{36}; ConvFactApprox_MS_Prblm1 = LoadedData{38}
 indsDigs_PlotErr_Prblm1 = LoadedData{42}; indsIter_PlotErr_Prblm1 = LoadedData{44}; 
 inds_FrstIndDigThatStsfyConvCond_Prblm1 = LoadedData{46};
 
+% %%% get first inds s.t. \| (I+Ci)^(-1) F \| < 1
+% invIpCi_Fi_norms = LoadedData{48}; inds_FrstIndDigThatStsfy_norm_invIpCi_Fi_leq_1_Prblm1 = nan(length(list_of_nmb_int_gridcols),1);
+% for ind_nmbgridcols = 1:length(list_of_nmb_int_gridcols)
+%     for ind_dig = 1:length(RM_nmbdigits_list)
+%         if invIpCi_Fi_norms(ind_nmbgridcols,ind_dig,1) < 1 && invIpCi_Fi_norms(ind_nmbgridcols,ind_dig,2) < 1
+%         inds_FrstIndDigThatStsfy_norm_invIpCi_Fi_leq_1_Prblm1(ind_nmbgridcols) = ind_dig; break;
+%         end
+%     end
+% end
+
+%%% holder:
+inds_FrstIndDigThatStsfy_norm_invIpCi_Fi_leq_1_Prblm1 = 10*ones(length(list_of_nmb_int_gridcols),1);
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 ProblemChoice = 2;
@@ -32,6 +46,19 @@ ConvCurves_RAS_Prblm2 = LoadedData{30}; ConvFactApprox_RAS_Prblm2 = LoadedData{3
 ConvCurves_MS_Prblm2 = LoadedData{36}; ConvFactApprox_MS_Prblm2 = LoadedData{38}; PlotData_ErrPlot_MS_Prblm2 = LoadedData{40};
 indsDigs_PlotErr_Prblm2 = LoadedData{42}; indsIter_PlotErr_Prblm2 = LoadedData{44}; 
 inds_FrstIndDigThatStsfyConvCond_Prblm2 = LoadedData{46};
+
+% %%% get first inds s.t. \| (I+Ci)^(-1) F \| < 1
+% invIpCi_Fi_norms = LoadedData{48}; inds_FrstIndDigThatStsfy_norm_invIpCi_Fi_leq_1_Prblm2 = nan(length(list_of_nmb_int_gridcols),1);
+% for ind_nmbgridcols = 1:length(list_of_nmb_int_gridcols)
+%     for ind_dig = 1:length(RM_nmbdigits_list)
+%         if invIpCi_Fi_norms(ind_nmbgridcols,ind_dig,1) < 1 && invIpCi_Fi_norms(ind_nmbgridcols,ind_dig,2) < 1
+%         inds_FrstIndDigThatStsfy_norm_invIpCi_Fi_leq_1_Prblm2(ind_nmbgridcols) = ind_dig; break;
+%         end
+%     end
+% end
+%%% holder:
+inds_FrstIndDigThatStsfy_norm_invIpCi_Fi_leq_1_Prblm2 = 10*ones(length(list_of_nmb_int_gridcols),1);
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -46,11 +73,11 @@ indsDigs_PlotErr_Prblm3 = LoadedData{42}; indsIter_PlotErr_Prblm3 = LoadedData{4
 inds_FrstIndDigThatStsfyConvCond_Prblm3 = LoadedData{46};
 
 %%% get first inds s.t. \| (I+Ci)^(-1) F \| < 1
-invIpCi_Fi_norms = LoadedData{48}; inds_FrstIndDigThatStsfy_norm_invIpCi_Fi_leq_1 = nan(length(list_of_nmb_int_gridcols),1);
+invIpCi_Fi_norms = LoadedData{48}; inds_FrstIndDigThatStsfy_norm_invIpCi_Fi_leq_1_Prblm3 = nan(length(list_of_nmb_int_gridcols),1);
 for ind_nmbgridcols = 1:length(list_of_nmb_int_gridcols)
     for ind_dig = 1:length(RM_nmbdigits_list)
         if invIpCi_Fi_norms(ind_nmbgridcols,ind_dig,1) < 1 && invIpCi_Fi_norms(ind_nmbgridcols,ind_dig,2) < 1
-        inds_FrstIndDigThatStsfy_norm_invIpCi_Fi_leq_1(ind_nmbgridcols) = ind_dig; break;
+        inds_FrstIndDigThatStsfy_norm_invIpCi_Fi_leq_1_Prblm3(ind_nmbgridcols) = ind_dig; break;
         end
     end
 end
@@ -517,6 +544,8 @@ ribbon(ConvFactApprox_dAS_Prblm1'); hold on;
 for ind = 1:length(list_of_nmb_int_gridcols)
     x = ind; y = inds_FrstIndDigThatStsfyConvCond_Prblm1(ind); z = ConvFactApprox_dAS_Prblm1(x,y);
     plot3(x,y,z,'Marker','o','Color','black','MarkerSize',15,'MarkerFaceColor','[.7 .7 .7]'); hold on;
+    a = ind; b = inds_FrstIndDigThatStsfy_norm_invIpCi_Fi_leq_1_Prblm1(ind); c = ConvFactApprox_dAS_Prblm1(a,b);
+    plot3(a,b,c,'Marker','o','Color','black','MarkerSize',15,'MarkerFaceColor','[1 1 1]'); hold on;
 end
 view(angle1,angle2); title('damped additive Schwarz', 'interpreter', 'latex');
 xticks([]); ylim([0,17]); yticks([1,4,8,12,16]); yticklabels({});
@@ -527,16 +556,19 @@ ribbon(ConvFactApprox_RAS_Prblm1'); hold on;
 for ind = 1:length(list_of_nmb_int_gridcols)
     x = ind; y = inds_FrstIndDigThatStsfyConvCond_Prblm1(ind); z = ConvFactApprox_RAS_Prblm1(x,y);
     plot3(x,y,z,'Marker','o','Color','black','MarkerSize',15,'MarkerFaceColor','[.7 .7 .7]'); hold on;
+    a = ind; b = inds_FrstIndDigThatStsfy_norm_invIpCi_Fi_leq_1_Prblm1(ind); c = ConvFactApprox_RAS_Prblm1(a,b);
+    plot3(a,b,c,'Marker','o','Color','black','MarkerSize',15,'MarkerFaceColor','[1 1 1]'); hold on;
 end
 view(angle1,angle2); title('restricted additive Schwarz', 'interpreter', 'latex');
 xticks([]); ylim([0,17]); yticks([1,4,8,12,16]); yticklabels({});
 
-nexttile(); LegendHandles = []; LegendLabels = {};
+nexttile(); 
 ribbon(ConvFactApprox_MS_Prblm1');  hold on; 
 for ind = 1:length(list_of_nmb_int_gridcols)
     x = ind; y = inds_FrstIndDigThatStsfyConvCond_Prblm1(ind); z = ConvFactApprox_MS_Prblm1(x,y);
-    plt = plot3(x,y,z,'Marker','o','Color','black','MarkerSize',15,'MarkerFaceColor','[.7 .7 .7]'); hold on;
-    LegendHandles(1) = plt; LegendLabels{1} = 'first $d_s$ such that $\| A_i^{-1} \mathtt{E}_i \| < 1$';
+    plot3(x,y,z,'Marker','o','Color','black','MarkerSize',15,'MarkerFaceColor','[.7 .7 .7]'); hold on;
+    a = ind; b = inds_FrstIndDigThatStsfy_norm_invIpCi_Fi_leq_1_Prblm1(ind); c = ConvFactApprox_MS_Prblm1(a,b);
+    plot3(a,b,c,'Marker','o','Color','black','MarkerSize',15,'MarkerFaceColor','[1 1 1]'); hold on;
 end
 view(angle1,angle2);  title('multiplicative Schwarz', 'interpreter', 'latex');
 xticks([]); ylim([0,17]); yticks([1,4,8,12,16]); yticklabels({});
@@ -549,6 +581,8 @@ ribbon(ConvFactApprox_dAS_Prblm2'); hold on;
 for ind = 1:length(list_of_nmb_int_gridcols)
     x = ind; y = inds_FrstIndDigThatStsfyConvCond_Prblm2(ind); z = ConvFactApprox_dAS_Prblm2(x,y);
     plot3(x,y,z,'Marker','o','Color','black','MarkerSize',15,'MarkerFaceColor','[.7 .7 .7]'); hold on;
+    a = ind; b = inds_FrstIndDigThatStsfy_norm_invIpCi_Fi_leq_1_Prblm2(ind); c = ConvFactApprox_dAS_Prblm2(a,b);
+    plt2 = plot3(a,b,c,'Marker','o','Color','black','MarkerSize',15,'MarkerFaceColor','[1 1 1]'); hold on;
 end
 view(angle1,angle2); 
 xticks([]); ylim([0,17]); yticks([1,4,8,12,16]); yticklabels({});
@@ -559,15 +593,19 @@ ribbon(ConvFactApprox_RAS_Prblm2'); hold on;
 for ind = 1:length(list_of_nmb_int_gridcols)
     x = ind; y = inds_FrstIndDigThatStsfyConvCond_Prblm2(ind); z = ConvFactApprox_RAS_Prblm2(x,y);
     plot3(x,y,z,'Marker','o','Color','black','MarkerSize',15,'MarkerFaceColor','[.7 .7 .7]'); hold on;
+    a = ind; b = inds_FrstIndDigThatStsfy_norm_invIpCi_Fi_leq_1_Prblm2(ind); c = ConvFactApprox_RAS_Prblm2(a,b);
+    plt2 = plot3(a,b,c,'Marker','o','Color','black','MarkerSize',15,'MarkerFaceColor','[1 1 1]'); hold on;
 end
 view(angle1,angle2);
 xticks([]); ylim([0,17]); yticks([1,4,8,12,16]); yticklabels({});
 
-nexttile(); LegendHandles = []; LegendLabels = {};
+nexttile();
 ribbon(ConvFactApprox_MS_Prblm2');  hold on; 
 for ind = 1:length(list_of_nmb_int_gridcols)
     x = ind; y = inds_FrstIndDigThatStsfyConvCond_Prblm2(ind); z = ConvFactApprox_MS_Prblm2(x,y);
     plt = plot3(x,y,z,'Marker','o','Color','black','MarkerSize',15,'MarkerFaceColor','[.7 .7 .7]'); hold on;
+    a = ind; b = inds_FrstIndDigThatStsfy_norm_invIpCi_Fi_leq_1_Prblm2(ind); c = ConvFactApprox_MS_Prblm2(a,b);
+    plt2 = plot3(a,b,c,'Marker','o','Color','black','MarkerSize',15,'MarkerFaceColor','[1 1 1]'); hold on;
 end
 view(angle1,angle2);
 xticks([]); ylim([0,17]); yticks([1,4,8,12,16]); yticklabels({});
@@ -579,11 +617,9 @@ nexttile();
 ribbon(ConvFactApprox_dAS_Prblm3'); hold on; 
 for ind = 1:length(list_of_nmb_int_gridcols)
     x = ind; y = inds_FrstIndDigThatStsfyConvCond_Prblm3(ind); z = ConvFactApprox_dAS_Prblm3(x,y);
-    plt1 = plot3(x,y,z,'Marker','o','Color','black','MarkerSize',15,'MarkerFaceColor','[.7 .7 .7]'); hold on;
-    a = ind; b = inds_FrstIndDigThatStsfy_norm_invIpCi_Fi_leq_1(ind); c = ConvFactApprox_dAS_Prblm3(a,b);
-    plt2 = plot3(a,b,c,'Marker','o','Color','black','MarkerSize',15,'MarkerFaceColor','[1 1 1]'); hold on;
-    % LegendHandles(1) = plt1; LegendLabels{1} = 'first $d_s$ such that convergence conditions are satisfied';
-    % LegendHandles(2) = plt2; LegendLabels{2} = 'first $d_s$ such that convergence conditions are satisfied';
+    plot3(x,y,z,'Marker','o','Color','black','MarkerSize',15,'MarkerFaceColor','[.7 .7 .7]'); hold on;
+    a = ind; b = inds_FrstIndDigThatStsfy_norm_invIpCi_Fi_leq_1_Prblm3(ind); c = ConvFactApprox_dAS_Prblm3(a,b);
+    plot3(a,b,c,'Marker','o','Color','black','MarkerSize',15,'MarkerFaceColor','[1 1 1]'); hold on;
 end
 view(angle1,angle2); 
 xticks([]); ylabel('$d_s$','FontSize',24,'interpreter', 'latex'); ylim([0,17]); yticks([1,4,8,12,16]); yticklabels({'1','4','8','12','16'}); ytickangle(0);
@@ -593,11 +629,9 @@ nexttile();
 ribbon(ConvFactApprox_RAS_Prblm3'); hold on; 
 for ind = 1:length(list_of_nmb_int_gridcols)
     x = ind; y = inds_FrstIndDigThatStsfyConvCond_Prblm3(ind); z = ConvFactApprox_RAS_Prblm3(x,y);
-    plt1 = plot3(x,y,z,'Marker','o','Color','black','MarkerSize',15,'MarkerFaceColor','[.7 .7 .7]'); hold on;
-    a = ind; b = inds_FrstIndDigThatStsfy_norm_invIpCi_Fi_leq_1(ind); c = ConvFactApprox_RAS_Prblm3(a,b);
-    plt2 = plot3(a,b,c,'Marker','o','Color','black','MarkerSize',15,'MarkerFaceColor','[1 1 1]'); hold on;
-    % LegendHandles(1) = plt1; LegendLabels{1} = 'first $d_s$ such that convergence conditions are satisfied';
-    % LegendHandles(2) = plt2; LegendLabels{2} = 'first $d_s$ such that convergence conditions are satisfied';
+    plot3(x,y,z,'Marker','o','Color','black','MarkerSize',15,'MarkerFaceColor','[.7 .7 .7]'); hold on;
+    a = ind; b = inds_FrstIndDigThatStsfy_norm_invIpCi_Fi_leq_1_Prblm3(ind); c = ConvFactApprox_RAS_Prblm3(a,b);
+    plot3(a,b,c,'Marker','o','Color','black','MarkerSize',15,'MarkerFaceColor','[1 1 1]'); hold on;
 end
 view(angle1,angle2);
 xticks([]); ylabel('$d_s$','FontSize',24,'interpreter', 'latex'); ylim([0,17]); yticks([1,4,8,12,16]); yticklabels({'1','4','8','12','16'}); ytickangle(0);
@@ -607,7 +641,7 @@ ribbon(ConvFactApprox_MS_Prblm3');  hold on;
 for ind = 1:length(list_of_nmb_int_gridcols)
     x = ind; y = inds_FrstIndDigThatStsfyConvCond_Prblm3(ind); z = ConvFactApprox_MS_Prblm3(x,y);
     plt1 = plot3(x,y,z,'Marker','o','Color','black','MarkerSize',15,'MarkerFaceColor','[.7 .7 .7]'); hold on;
-    a = ind; b = inds_FrstIndDigThatStsfy_norm_invIpCi_Fi_leq_1(ind); c = ConvFactApprox_MS_Prblm3(a,b);
+    a = ind; b = inds_FrstIndDigThatStsfy_norm_invIpCi_Fi_leq_1_Prblm3(ind); c = ConvFactApprox_MS_Prblm3(a,b);
     plt2 = plot3(a,b,c,'Marker','o','Color','black','MarkerSize',15,'MarkerFaceColor','[1 1 1]'); hold on;
     LegendHandles(1) = plt1; LegendLabels{1} = 'first $d_s$ such that convergence conditions are satisfied $\qquad$';
     LegendHandles(2) = plt2; LegendLabels{2} = 'first $d_s$ such that $\| (I + C_i)^{-1} \mathtt{F}_i \| < 1$';
